@@ -62,19 +62,33 @@ bool HelloWorld::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    auto label = Label::create();
+    label->setString("goofyy is a good boy but it is djskdj dsfds");
+    label->setSystemFontSize(100);
     if (label == nullptr)
     {
         problemLoading("'fonts/Marker Felt.ttf'");
     }
     else
     {
+//        label->setContentSize(Size(100, 400));
+        label->setDimensions(200, 30);
         // position the label on the center of the screen
         label->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - label->getContentSize().height));
+        label->setColor(Color3B::RED);
+        label->setHorizontalAlignment(TextHAlignment::LEFT);
+        label->setVerticalAlignment(TextVAlignment::CENTER);
+        label->setOverflow(Label::Overflow::SHRINK);
 
         // add the label as a child to this layer
         this->addChild(label, 1);
+        
+        auto layerColor = LayerColor::create(Color4B(Color3B::RED));
+        layerColor->setOpacity(120);
+        layerColor->setContentSize(label->getContentSize());
+        label->addChild(layerColor);
+//        auto layerColor = LayerColor::create(color4b, <#GLfloat width#>, <#GLfloat height#>)
     }
 
     // add "HelloWorld" splash screen"

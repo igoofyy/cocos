@@ -166,6 +166,7 @@ private:
     bool _letterVisible;
 };
 
+//label创建
 Label* Label::create()
 {
     auto ret = new (std::nothrow) Label;
@@ -178,6 +179,7 @@ Label* Label::create()
     return ret;
 }
 
+//创建 根据文本 字体 字体大小 diamod 水平对齐方式 垂直对齐方式
 Label* Label::create(const std::string& text, const std::string& font, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
     if (FileUtils::getInstance()->isFileExist(font))
@@ -190,6 +192,7 @@ Label* Label::create(const std::string& text, const std::string& font, float fon
     }
 }
 
+//创建系统文本
 Label* Label::createWithSystemFont(const std::string& text, const std::string& font, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
     auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
@@ -209,6 +212,7 @@ Label* Label::createWithSystemFont(const std::string& text, const std::string& f
     return nullptr;
 }
 
+//创建ttf文本
 Label* Label::createWithTTF(const std::string& text, const std::string& fontFile, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
     auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
@@ -312,7 +316,7 @@ bool Label::setCharMap(const std::string& plistFile)
     return true;
 }
 
-
+//初始化ttf
 bool Label::initWithTTF(const std::string& text,
                         const std::string& fontFilePath, float fontSize,
                         const Size& dimensions,
@@ -331,6 +335,7 @@ bool Label::initWithTTF(const std::string& text,
     return false;
 }
 
+//初始化ttf
 bool Label::initWithTTF(const TTFConfig& ttfConfig, const std::string& text, TextHAlignment /*hAlignment*/, int maxLineWidth)
 {
     if (FileUtils::getInstance()->isFileExist(ttfConfig.fontFilePath) && setTTFConfig(ttfConfig))
@@ -661,6 +666,7 @@ bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& ima
 
 void Label::setString(const std::string& text)
 {
+//   和之前的字符串进行比较 避免 没有必要的赋值 因为每一次 _contentDirty true都要进行渲染
     if (text.compare(_utf8Text))
     {
         _utf8Text = text;
@@ -674,6 +680,7 @@ void Label::setString(const std::string& text)
     }
 }
 
+// 配置对其方式 垂直对齐 和 水平对齐 数据有更改的时候 才去设置 _contentDirty
 void Label::setAlignment(TextHAlignment hAlignment,TextVAlignment vAlignment)
 {
     if (hAlignment != _hAlignment || vAlignment != _vAlignment)
@@ -685,6 +692,7 @@ void Label::setAlignment(TextHAlignment hAlignment,TextVAlignment vAlignment)
     }
 }
 
+//设置最大宽度 只有当_labelWidth == 0 的时候 才去自动适配最大宽度
 void Label::setMaxLineWidth(float maxLineWidth)
 {
     if (_labelWidth == 0 && _maxLineWidth != maxLineWidth)
@@ -694,6 +702,7 @@ void Label::setMaxLineWidth(float maxLineWidth)
     }
 }
 
+//设置外形尺寸
 void Label::setDimensions(float width, float height)
 {
     if(_overflow == Overflow::RESIZE_HEIGHT){
@@ -708,7 +717,8 @@ void Label::setDimensions(float width, float height)
 
         _maxLineWidth = width;
         _contentDirty = true;
-
+        
+        //当前益处的方式是shrink 这时候 字体大小会使用文本的内容大小
         if(_overflow == Overflow::SHRINK){
             if (_originalFontSize > 0) {
                 this->restoreFontSize();
@@ -730,6 +740,7 @@ void Label::restoreFontSize()
     }
 }
 
+//当前开启自动换行功能
 void Label::setLineBreakWithoutSpace(bool breakWithoutSpace)
 {
     if (breakWithoutSpace != _lineBreakWithoutSpaces)
